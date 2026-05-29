@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMenu, FiX, FiGithub, FiLinkedin } from 'react-icons/fi';
+import { FiMenu, FiX, FiGithub, FiLinkedin, FiMessageCircle } from 'react-icons/fi';
 
 const links = ['About', 'Projects', 'Experience', 'Contact'];
 
@@ -48,6 +48,7 @@ const Navbar = () => {
           <div className="nav-desktop" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <a href="https://github.com/abhishek-dev27" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = '#fff'} onMouseOut={e => e.target.style.color = 'var(--text-secondary)'}><FiGithub /></a>
             <a href="https://www.linkedin.com/in/abhishek-kumar-8746a1321/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = '#fff'} onMouseOut={e => e.target.style.color = 'var(--text-secondary)'}><FiLinkedin /></a>
+            <a href="https://wa.me/916209794249?text=Hi%20Abhishek!%20I%20visited%20your%20portfolio%20and%20would%20love%20to%20connect." target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', transition: 'color 0.2s' }} onMouseOver={e => e.target.style.color = '#25D366'} onMouseOut={e => e.target.style.color = 'var(--text-secondary)'}><FiMessageCircle /></a>
           </div>
 
           <button className="nav-mobile-btn" onClick={() => setMobileMenu(!mobileMenu)} style={{ display: 'none', background: 'none', border: 'none', color: '#fff', fontSize: '1.5rem', cursor: 'pointer' }}>
@@ -79,7 +80,10 @@ const Navbar = () => {
                 {link}
               </motion.a>
             ))}
-            <a href="https://drive.google.com/file/d/1HIPH_vKFUwotvY5IXE7FElILZrz102Ni/view?usp=drive_link" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ justifyContent: 'center', marginTop: '1rem' }}>
+            <a href="https://wa.me/916209794249?text=Hi%20Abhishek!%20I%20visited%20your%20portfolio%20and%20would%20love%20to%20connect." target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ justifyContent: 'center', marginTop: '0.5rem', background: 'linear-gradient(135deg, #25D366, #128C7E)' }}>
+              <FiMessageCircle /> WhatsApp
+            </a>
+            <a href="https://drive.google.com/file/d/1HIPH_vKFUwotvY5IXE7FElILZrz102Ni/view?usp=drive_link" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ justifyContent: 'center', marginTop: '0.5rem' }}>
               View Resume
             </a>
           </motion.div>
