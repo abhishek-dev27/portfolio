@@ -83,7 +83,7 @@ const Navbar = () => {
             <a href="https://wa.me/916209794249?text=Hi%20Abhishek!%20I%20visited%20your%20portfolio%20and%20would%20love%20to%20connect." target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ justifyContent: 'center', marginTop: '0.5rem', background: 'linear-gradient(135deg, #25D366, #128C7E)' }}>
               <FiMessageCircle /> WhatsApp
             </a>
-            <a href="https://drive.google.com/file/d/1HIPH_vKFUwotvY5IXE7FElILZrz102Ni/view?usp=drive_link" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ justifyContent: 'center', marginTop: '0.5rem' }}>
+            <a href="https://drive.google.com/file/d/1HPgvf577gxdoqVh7f0ZXSfy3c9xnPpjA/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ justifyContent: 'center', marginTop: '0.5rem' }}>
               View Resume
             </a>
           </motion.div>

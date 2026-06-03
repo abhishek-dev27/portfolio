@@ -38,7 +38,7 @@ const Hero = () => {
             <a href="#projects" className="btn-primary">
               View Projects <FiArrowRight />
             </a>
-            <a href="https://drive.google.com/file/d/1HIPH_vKFUwotvY5IXE7FElILZrz102Ni/view?usp=drive_link" target="_blank" rel="noopener noreferrer" className="btn-secondary">
+            <a href="https://drive.google.com/file/d/1HPgvf577gxdoqVh7f0ZXSfy3c9xnPpjA/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="btn-secondary">
               Resume <FiDownload />
             </a>
           </motion.div>
