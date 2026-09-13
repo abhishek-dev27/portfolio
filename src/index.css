@@ -56,10 +56,29 @@ body {
   color: #fff;
 }
 
+/* 1. Scroll Progress Bar (thin 2.5px fixed at top) */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2.5px;
+  background: var(--gradient-primary);
+  z-index: 1000;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.6), 0 0 4px rgba(6, 182, 212, 0.6);
+  pointer-events: none;
+  transition: width 0.08s linear;
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-base); }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+::-webkit-scrollbar-thumb { 
+  background: linear-gradient(to bottom, rgba(139, 92, 246, 0.3), rgba(6, 182, 212, 0.3));
+  border-radius: 4px; 
+}
+::-webkit-scrollbar-thumb:hover { 
+  background: linear-gradient(to bottom, rgba(139, 92, 246, 0.5), rgba(6, 182, 212, 0.5));
+}
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
@@ -83,7 +102,7 @@ a { color: inherit; text-decoration: none; }
   position: relative;
 }
 
-/* Typography Enhancements */
+/* Typography */
 .heading-xl {
   font-size: clamp(3rem, 8vw, 6rem);
   font-weight: 800;
@@ -138,24 +157,9 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
 }
 
-.bento-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 100%;
-  background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, -20%), rgba(255,255,255,0.06), transparent 40%);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s;
-}
-
 .bento-card:hover {
   border-color: var(--border-glow);
-  transform: translateY(-4px);
   box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5), 0 0 30px -10px rgba(139, 92, 246, 0.2);
-}
-
-.bento-card:hover::before {
-  opacity: 1;
 }
 
 /* Premium Buttons */
@@ -170,14 +174,15 @@ a { color: inherit; text-decoration: none; }
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255,255,255,0.08);
 }
 
 .btn-primary:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 20px rgba(255,255,255,0.2);
+  box-shadow: 0 8px 25px rgba(255,255,255,0.18);
 }
 
 .btn-secondary {
@@ -192,7 +197,7 @@ a { color: inherit; text-decoration: none; }
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .btn-secondary:hover {
@@ -200,16 +205,22 @@ a { color: inherit; text-decoration: none; }
   border-color: rgba(255,255,255,0.2);
 }
 
-/* Animations */
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.5; filter: blur(40px); }
-  50% { opacity: 0.8; filter: blur(60px); }
+/* Button shimmer effect */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
 }
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
 }
+.btn-shimmer:hover::after {
+  animation: shimmer 0.6s ease;
+}
+@keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
 
 /* Responsive Grid */
 .bento-grid {
@@ -230,4 +241,31 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 768px) {
   .section { padding: 5rem 0; }
   .bento-card { padding: 1.5rem; }
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  
+  *, *::before, *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+  }
+  
+  .ambient-cursor-glow,
+  .profile-glow,
+  .contact-border-glow,
+  .slide-left,
+  .slide-right {
+    animation: none !important;
+    display: none !important;
+  }
+  
+  .project-card,
+  .bento-card {
+    transform: none !important;
+  }
 }

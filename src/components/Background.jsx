@@ -65,20 +65,20 @@ const Background = () => {
           const forceDirectionY = dy / distance;
           const maxDistance = mouseRef.current.radius;
           const force = (maxDistance - distance) / maxDistance;
-          const directionX = forceDirectionX * force * 5;
-          const directionY = forceDirectionY * force * 5;
+          const dirX = forceDirectionX * force * 5;
+          const dirY = forceDirectionY * force * 5;
           
-          this.x -= directionX;
-          this.y -= directionY;
+          this.x -= dirX;
+          this.y -= dirY;
         } else {
           // Slowly return to base path
           if (this.x !== this.baseX) {
-            let dx = this.x - this.baseX;
-            this.x -= dx / 50;
+            let bx = this.x - this.baseX;
+            this.x -= bx / 50;
           }
           if (this.y !== this.baseY) {
-            let dy = this.y - this.baseY;
-            this.y -= dy / 50;
+            let by = this.y - this.baseY;
+            this.y -= by / 50;
           }
         }
 
@@ -91,37 +91,36 @@ const Background = () => {
       }
     }
 
-    const init = () => {
+    function init() {
       particlesArray = [];
-      let numberOfParticles = (canvas.height * canvas.width) / 12000;
+      // Optimized: reduced density for better performance
+      let numberOfParticles = Math.min((canvas.height * canvas.width) / 18000, 120);
       
       // Color palette
       const colors = ['#06b6d4', '#8b5cf6', '#ec4899', '#ffffff'];
 
       for (let i = 0; i < numberOfParticles; i++) {
-        let size = (Math.random() * 2) + 1;
-        let x = Math.random() * (window.innerWidth - size * 2) + size * 2;
-        let y = Math.random() * (window.innerHeight - size * 2) + size * 2;
-        let directionX = (Math.random() * 0.8) - 0.4;
-        let directionY = (Math.random() * 0.8) - 0.4;
+        let size = (Math.random() * 1.8) + 0.8;
+        let x = Math.random() * (canvas.width - size * 2) + size * 2;
+        let y = Math.random() * (canvas.height - size * 2) + size * 2;
+        let directionX = (Math.random() * 0.6) - 0.3;
+        let directionY = (Math.random() * 0.6) - 0.3;
         let color = colors[Math.floor(Math.random() * colors.length)];
         
         particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
       }
     }
 
-    const connect = () => {
-      let opacityValue = 1;
+    function connect() {
+      const connectionDistance = (canvas.width / 8) * (canvas.height / 8);
       for (let a = 0; a < particlesArray.length; a++) {
-        for (let b = a; b < particlesArray.length; b++) {
-          let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + 
-                         ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-          if (distance < (canvas.width / 10) * (canvas.height / 10)) {
-            opacityValue = 1 - (distance / 15000);
-            
-            // Draw lines connecting particles
-            ctx.strokeStyle = `rgba(139, 92, 246, ${opacityValue * 0.4})`; // Purple glow lines
-            ctx.lineWidth = 1;
+        for (let b = a + 1; b < particlesArray.length; b++) {
+          let distance = ((particlesArray[a].x - particlesArray[b].x) ** 2) + 
+                         ((particlesArray[a].y - particlesArray[b].y) ** 2);
+          if (distance < connectionDistance) {
+            let opacityValue = 1 - (distance / 15000);
+            ctx.strokeStyle = `rgba(139, 92, 246, ${opacityValue * 0.35})`;
+            ctx.lineWidth = 0.8;
             ctx.beginPath();
             ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
             ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
@@ -131,12 +130,11 @@ const Background = () => {
       }
     }
 
-    const animate = () => {
+    function animate() {
       animationFrameId = requestAnimationFrame(animate);
       
-      // Create trailing effect by filling with opacity instead of clearRect
       ctx.fillStyle = 'rgba(3, 0, 20, 0.3)';
-      ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       for (let i = 0; i < particlesArray.length; i++) {
         particlesArray[i].update();
@@ -147,8 +145,16 @@ const Background = () => {
     init();
     animate();
 
+    // Re-init particles on resize
+    const handleResize = () => {
+      resizeCanvas();
+      init();
+    };
+    window.addEventListener('resize', handleResize);
+
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseout', handleMouseLeave);
       cancelAnimationFrame(animationFrameId);
@@ -158,6 +164,52 @@ const Background = () => {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: -1, background: '#030014' }}>
       <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%' }} />
+      {/* Subtle gradient orbs */}
+      <div className="bg-orb bg-orb-1" />
+      <div className="bg-orb bg-orb-2" />
+      <div className="bg-orb bg-orb-3" />
+
+      <style>{`
+        .bg-orb {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(100px);
+          opacity: 0.15;
+          pointer-events: none;
+          animation: float-orb 20s ease-in-out infinite;
+        }
+        .bg-orb-1 {
+          width: 500px;
+          height: 500px;
+          background: var(--accent-purple);
+          top: 10%;
+          right: -10%;
+          animation-delay: 0s;
+        }
+        .bg-orb-2 {
+          width: 400px;
+          height: 400px;
+          background: var(--accent-cyan);
+          bottom: 20%;
+          left: -8%;
+          animation-delay: -7s;
+        }
+        .bg-orb-3 {
+          width: 350px;
+          height: 350px;
+          background: var(--accent-pink);
+          top: 50%;
+          right: 20%;
+          animation-delay: -14s;
+          opacity: 0.08;
+        }
+        @keyframes float-orb {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          25% { transform: translate(30px, -20px) scale(1.05); }
+          50% { transform: translate(-20px, 30px) scale(0.95); }
+          75% { transform: translate(20px, 20px) scale(1.02); }
+        }
+      `}</style>
     </div>
   );
 };
